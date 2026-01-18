@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Well Do You Know Me?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0f1e;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(138, 43, 226, 0.2), transparent 50%);
+            animation: rotate 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 750px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+            animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            margin: 0 auto;
+        }
+
+        .container::-webkit-scrollbar {
+            width: 0px;
+            display: none;
+        }
+
+        .container {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Intro Screen */
+        .intro-screen {
+            text-align: center;
+        }
+
+        .emoji-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5em;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .intro-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.15em;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 20px 60px;
+            font-size: 1.3em;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .name-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 18px 25px;
+            font-size: 1.2em;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .name-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 1em;
+            margin-bottom: 15px;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Floating Eyes Effect */
+        .floating-eyes {
+            position: fixed;
+            font-size: 3em;
+            pointer-events: none;
+            z-index: 1000;
+            animation: floatIn 2s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes floatIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.7;
+                transform: scale(1);
+            }
+        }
+
+        .signature {
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95em;
+            font-style: italic;
+        }
+
+        .gender-options {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .gender-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 20px 30px;
+            font-size: 1.2em;
+            font-weight: 600;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            min-width: 140px;
+        }
+
+        .gender-btn:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .start-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .start-btn:hover::before {
+            left: 100%;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Quiz Screen */
+        .quiz-screen {
+            animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .question-counter {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: #fff;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #f093fb 100%);
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 35px;
+            border-radius: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .question {
+            color: #fff;
+            font-size: 1.6em;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        .option:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transform: scale(1.03);
+        }
+
+        .option span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2em;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            opacity: 0.4;
+            pointer-events: none;
+            display: block;
+            margin: 0 auto;
+            z-index: 10;
+            position: relative;
+        }
+
+        .next-btn.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .next-btn.active:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Result Screen */
+        .result-screen {
+            text-align: center;
+            animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .result-emoji {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.5);
+            animation: scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 3px solid rgba(102, 126, 234, 0.3);
+            animation: ripple 2s ease-out infinite;
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .score-text {
+            color: white;
+            font-size: 3.5em;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .score-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .result-message {
+            color: #fff;
+            font-size: 2em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .result-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+            z-index: 10;
+            position: relative;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.6);
+        }
+
+        .answer-review {
+            text-align: left;
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .answer-review::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .answer-review::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .answer-review::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 10px;
+        }
+
+        .review-title {
+            color: #fff;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .review-item {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+        .review-item.correct {
+            border-color: #4caf50;
+        }
+
+        .review-item.incorrect {
+            border-color: #f44336;
+        }
+
+        .review-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .review-question {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .review-answer {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        .correct-text {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .incorrect-text {
+            color: #f44336;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop preload="auto"></audio>
+    
+    <!-- Helicopter Roast Sounds -->
+    <audio id="roastSound" preload="auto"></audio>
+    
+    <!-- Gender Selection Sounds -->
+    <audio id="genderSound" preload="auto"></audio>
+    
+    <!-- Result Sounds -->
+    <audio id="resultSound" preload="auto"></audio>
+    
+    <!-- Next Question Sound -->
+    <audio id="nextSound" preload="auto"></audio>
+
+    <div class="container">
+        <!-- Name Entry Screen -->
+        <div id="nameScreen" class="intro-screen">
+            <div class="emoji-container">🤔</div>
+            <h1>Kaisan Ba!</h1>
+            <p class="intro-text">Let's see how well you know me. Enter your name to begin!</p>
+            <input type="text" id="userName" class="name-input" placeholder="Enter your name...">
+            <p id="nameError" class="error-msg hidden">⚠️ Please enter your name!</p>
+            <button class="start-btn" onclick="submitName()">Continue →</button>
+            <p class="signature">Developed by RS ❤️</p>
+        </div>
+
+        <!-- Gender Selection Screen -->
+        <div id="genderScreen" class="intro-screen hidden">
+            <div class="emoji-container">👤</div>
+            <h1>Select Your Gender</h1>
+            <p class="intro-text">This helps us personalize your experience!</p>
+            <div class="gender-options">
+                <button class="gender-btn" onclick="selectGender('Brother')">Male 👨</button>
+                <button class="gender-btn" onclick="selectGender('Sister')">Female 👩</button>
+                <button class="gender-btn" onclick="selectGender('Helicopter')">Helicopter 🚁</button>
+            </div>
+        </div>
+
+        <!-- Helicopter Block Screen -->
+        <div id="helicopterScreen" class="intro-screen hidden">
+            <div class="emoji-container">🚁</div>
+            <h1>Oops!</h1>
+            <p class="intro-text">Please change your gender and come back! 😄</p>
+            <button class="start-btn" onclick="goBackToGender()">Go Back</button>
+        </div>
+
+        <!-- Intro Screen -->
+        <div id="introScreen" class="intro-screen hidden">
+            <div class="emoji-container">🤔</div>
+            <h1>How Well Do You Know Me?</h1>
+            <p class="intro-text">Think you know me? Let's put your knowledge to the test! Answer these questions and discover how well you really know me.</p>
+            <button class="start-btn" onclick="startQuiz()">Start Quiz 🚀</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quizScreen" class="quiz-screen hidden">
+            <div class="quiz-header">
+                <div class="question-counter" id="questionNumber">Question 1 of 5</div>
+                <div class="score-display" id="currentScore">Score: 0</div>
+            </div>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="question-card">
+                <div class="question" id="question"></div>
+            </div>
+            <div class="options" id="options"></div>
+            <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+        </div>
+
+        <!-- Feedback Screen -->
+        <div id="feedbackScreen" class="quiz-screen hidden">
+            <div class="question-card">
+                <div class="question">What do you think about me as a friend?</div>
+            </div>
+            <textarea id="feedbackInput" placeholder="Share your thoughts here..." style="width: 100%; min-height: 150px; padding: 20px; border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 15px; background: rgba(255, 255, 255, 0.05); color: white; font-size: 1.1em; font-family: inherit; resize: vertical; margin-bottom: 30px; backdrop-filter: blur(10px);"></textarea>
+            <p id="feedbackError" class="error-msg hidden" style="color: #ff6b6b; text-align: center; margin-bottom: 20px;">⚠️ Please share your thoughts before continuing!</p>
+            <button class="next-btn active" onclick="submitFeedback()" style="opacity: 1; pointer-events: all;">Continue →</button>
+        </div>
+
+        <!-- Rating Screen -->
+        <div id="ratingScreen" class="quiz-screen hidden">
+            <div class="question-card">
+                <div class="question">How much do you like this WebUI design?</div>
+            </div>
+            <div class="rating-options" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px;">
+                <div class="rating-btn" onclick="selectRating(1)">
+                    <div class="rating-number">1</div>
+                    <div class="rating-stars">⭐</div>
+                </div>
+                <div class="rating-btn" onclick="selectRating(2)">
+                    <div class="rating-number">2</div>
+                    <div class="rating-stars">⭐⭐</div>
+                </div>
+                <div class="rating-btn" onclick="selectRating(3)">
+                    <div class="rating-number">3</div>
+                    <div class="rating-stars">⭐⭐⭐</div>
+                </div>
+                <div class="rating-btn" onclick="selectRating(4)">
+                    <div class="rating-number">4</div>
+                    <div class="rating-stars">⭐⭐⭐⭐</div>
+                </div>
+                <div class="rating-btn" onclick="selectRating(5)">
+                    <div class="rating-number">5</div>
+                    <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                </div>
+            </div>
+            <p id="ratingError" class="error-msg hidden" style="color: #ff6b6b; text-align: center; margin-bottom: 20px;">⚠️ Please select a rating before continuing!</p>
+            <button class="next-btn" id="ratingNextBtn" onclick="submitRating()" style="opacity: 0.5; pointer-events: none;">Submit & See Results →</button>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="resultScreen" class="result-screen hidden">
+            <div class="result-emoji" id="resultEmoji">🎉</div>
+            <div class="score-circle">
+                <div class="score-text" id="scoreText">0/5</div>
+                <div class="score-label">CORRECT</div>
+            </div>
+            <div class="result-message" id="resultMessage"></div>
+            <div class="result-subtitle" id="resultSubtitle"></div>
+            <div class="action-buttons">
+                <button class="restart-btn" onclick="restartQuiz()">Try Again 🔄</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data - CUSTOMIZE THESE QUESTIONS!
+        const quizData = [
+            {
+                question: "What's my favorite food?",
+                options: ["Mutton and Pulao", "Chicken Fried Rice", "Mutton Biryani", "Tandoori"],
+                correct: 2
+            },
+            {
+                question: "What's my favorite color?",
+                options: ["Blue", "Red", "Black", "Purple"],
+                correct: 0
+            },
+            {
+                question: "What do I mostly like to do in my free time?",
+                options: ["Play games", "Watch BeastBoyShub", "Listen to music", "Read Books"],
+                correct: 1
+            },
+            {
+                question: "What's my biggest fear?",
+                options: ["Future", "FOMO", "To lose what I love", "Thrilling nights"],
+                correct: 2
+            },
+            {
+                question: "What's my dream destination?",
+                options: ["Paris", "Japan", "New York", "Switzerland"],
+                correct: 1
+            },
+            {
+                question: "Which one is my most desired Motorcycle?",
+                options: ["Honda CB350RS", "Bajaj Dominar 400", "TVS Apache RR310", "Royal Enfield Interceptor"],
+                correct: 3
+            },
+            {
+                question: "What's my birth month?",
+                options: ["March", "October", "January", "May"],
+                correct: 0
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswer = null;
+        let userAnswers = [];
+        let userName = '';
+        let userGender = '';
+        let userFeedback = '';
+        let userRating = null;
+
+        const BOT_TOKEN = '8151285962:AAH4xiP21G7m9-b-LtelWbozfxddB4-DswY';
+        const CHAT_ID = '2039080673';
+
+        // Array of roast sounds for helicopter selection
+        const roastSounds = [
+            'https://www.dropbox.com/scl/fi/kwz6qftfj284hxqi76tbt/chala-ja-bsdk.mp3?rlkey=gl15rhqeki3vc5u8uyhoq0xra&st=k2ze1kcx&dl=1',
+            'https://www.dropbox.com/scl/fi/s20bybm8gu566stfvqp5m/cid-acp-behn-choo.mp3?rlkey=meaixm83cgbdwdop3wthf0jcr&st=j2jf29hq&dl=1',
+            'https://www.dropbox.com/scl/fi/m7cv03i2zxaxhqrupaykt/cid.mp3?rlkey=4m4tswwqrwhzb7sio08xwecdf&st=3yyhx06b&dl=1',
+            'https://www.dropbox.com/scl/fi/a9tbewbwiu6omgcn7uehe/family-dekhte-hain-nahi-to.mp3?rlkey=21eyere0gucaya9crv1nao5i3&st=ubqwyhcm&dl=1',
+            'https://www.dropbox.com/scl/fi/x75mzf3jgp2uf1vdfsb7u/teri-maa-ka-bosda-fat-jaga-1.mp3?rlkey=k6w4moro19141o1qf88y19ao0&st=7xsr20x5&dl=1',
+            'https://www.dropbox.com/scl/fi/f58ojwm6icxvk62m1gjlg/sochna-pdta-hai-re-hindustani-bhau.mp3?rlkey=gky8o5nom7aslwskzycyiuj7d&st=1unft9y3&dl=1',
+            'https://www.dropbox.com/scl/fi/pp7box1i7ajoly7xt7wmx/modi-ji-bkl-1.mp3?rlkey=ut1uptph4n0dhr1h5wq20rb0j&st=32eq33jr&dl=1',
+            'https://www.dropbox.com/scl/fi/uufz9hzp8n4oeahzs2kog/aisa-mat-karo.mp3?rlkey=h7n2won7mcoq5xoifsss0v358&st=hxm9yuu8&dl=1',
+            'https://www.dropbox.com/scl/fi/bssclgc3o3dt1guhga4d4/kya-re-bhik-mangya-deepak-kalal.mp3?rlkey=86kkgdqrzmgm7kvsu2l8cvfz1&st=xde6we1e&dl=1'
+        ];
+
+        // Gender selection sounds
+        const maleSoundUrl = 'https://www.dropbox.com/scl/fi/4gkk4lz5jusua1bkm6pei/lekin-ye-sala.mp3?rlkey=72tcl53skl64ol1f4tsehwl11&st=csewu3d5&dl=1';
+        const femaleSoundUrl = 'https://www.dropbox.com/scl/fi/io695sv6htg46ie9gcw36/accha-thik-hai-samjhgya-puneet-superstar-1.mp3?rlkey=5j6boo2idmcoq1wtmodppiwvq&st=5gkbwsne&dl=1';
+
+        // Result sounds
+        const perfectScoreSound = 'https://www.dropbox.com/scl/fi/5aw4ee2v7biceec7avmjc/shabash-beta.mp3?rlkey=3bxkiuitseaz83y389hf26gse&st=tbq0w8my&dl=1';
+        const lessThanPerfectSound = 'https://www.dropbox.com/scl/fi/kkxm1i3py9s5rsc4wz59w/ramayan-gayab.mp3?rlkey=yyu1zqy6arn1nicad5vzfotem&st=39lb81jm&dl=1';
+
+        // Next question sound
+        const nextQuestionSound = 'https://www.dropbox.com/scl/fi/9n4aojzw600skyk4zkerj/AudioCutter_Fahhhh-Sound-effect-HD-MP3_160K.mp3?rlkey=tguzkoqnrcaqqo68hcofctgev&st=xep5v2l7&dl=1';
+
+        // Enable background music
+        window.addEventListener('load', function() {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.3;
+            
+            // Set the audio source from Dropbox
+            bgMusic.src = 'https://www.dropbox.com/scl/fi/a4e9vd3e87rzeqaduikzk/Soviet-Connection-Theme-from-GTA-IV-MP3_160K.mp3?rlkey=z4om9a9ol43u1qxy33nn6nngd&st=qfwchapm&dl=1';
+            bgMusic.load();
+            
+            console.log('Audio source set to Dropbox');
+        });
+
+        function submitName() {
+            const nameInput = document.getElementById('userName').value.trim();
+            const errorMsg = document.getElementById('nameError');
+            
+            if (nameInput === '') {
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+            
+            userName = nameInput;
+            
+            document.getElementById('nameScreen').classList.add('hidden');
+            document.getElementById('genderScreen').classList.remove('hidden');
+        }
+
+        function selectGender(gender) {
+            userGender = gender;
+            
+            // Check if helicopter is selected
+            if (gender === 'Helicopter') {
+                // Play random roast sound
+                const roastAudio = document.getElementById('roastSound');
+                const randomIndex = Math.floor(Math.random() * roastSounds.length);
+                roastAudio.src = roastSounds[randomIndex];
+                roastAudio.volume = 0.7;
+                
+                roastAudio.play().then(() => {
+                    console.log('🚁 Playing roast sound!');
+                }).catch(err => {
+                    console.error('Roast sound error:', err);
+                });
+                
+                document.getElementById('genderScreen').classList.add('hidden');
+                document.getElementById('helicopterScreen').classList.remove('hidden');
+            } else {
+                // Play appropriate gender sound
+                const genderAudio = document.getElementById('genderSound');
+                
+                if (gender === 'Brother') {
+                    genderAudio.src = maleSoundUrl;
+                } else if (gender === 'Sister') {
+                    genderAudio.src = femaleSoundUrl;
+                }
+                
+                genderAudio.volume = 0.6; // Increased to 60%
+                genderAudio.play().catch(err => {
+                    console.error('Gender sound error:', err);
+                });
+                
+                document.getElementById('genderScreen').classList.add('hidden');
+                document.getElementById('introScreen').classList.remove('hidden');
+            }
+        }
+
+        function goBackToGender() {
+            document.getElementById('helicopterScreen').classList.add('hidden');
+            document.getElementById('genderScreen').classList.remove('hidden');
+        }
+
+        function startQuiz() {
+            document.getElementById('introScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = quizData[currentQuestion];
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+            document.getElementById('question').textContent = q.question;
+            document.getElementById('currentScore').textContent = `Score: ${score}`;
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.innerHTML = `<span>${option}</span>`;
+                optionDiv.onclick = () => selectOption(index, optionDiv);
+                optionsDiv.appendChild(optionDiv);
+            });
+
+            updateProgress();
+            selectedAnswer = null;
+            document.getElementById('nextBtn').classList.remove('active');
+            
+            // Add floating eyes effect
+            addFloatingEyes();
+        }
+
+        function addFloatingEyes() {
+            // Remove any existing eyes
+            document.querySelectorAll('.floating-eyes').forEach(eye => eye.remove());
+            
+            // Create 3-5 random eyes at different positions
+            const eyeCount = Math.floor(Math.random() * 3) + 3; // 3 to 5 eyes
+            
+            for (let i = 0; i < eyeCount; i++) {
+                const eye = document.createElement('div');
+                eye.className = 'floating-eyes';
+                eye.textContent = '👁️';
+                
+                // Random position on screen edges
+                const side = Math.floor(Math.random() * 4); // 0: top, 1: right, 2: bottom, 3: left
+                
+                switch(side) {
+                    case 0: // Top
+                        eye.style.top = Math.random() * 20 + '%';
+                        eye.style.left = Math.random() * 80 + 10 + '%';
+                        break;
+                    case 1: // Right
+                        eye.style.right = Math.random() * 20 + '%';
+                        eye.style.top = Math.random() * 80 + 10 + '%';
+                        break;
+                    case 2: // Bottom
+                        eye.style.bottom = Math.random() * 20 + '%';
+                        eye.style.left = Math.random() * 80 + 10 + '%';
+                        break;
+                    case 3: // Left
+                        eye.style.left = Math.random() * 20 + '%';
+                        eye.style.top = Math.random() * 80 + 10 + '%';
+                        break;
+                }
+                
+                document.body.appendChild(eye);
+                
+                // Remove eye after animation
+                setTimeout(() => {
+                    eye.remove();
+                }, 2000);
+            }
+        }
+
+        function selectOption(index, element) {
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            selectedAnswer = index;
+            document.getElementById('nextBtn').classList.add('active');
+        }
+
+        function nextQuestion() {
+            if (selectedAnswer === null) return;
+
+            // Play next question sound
+            const nextAudio = document.getElementById('nextSound');
+            nextAudio.src = nextQuestionSound;
+            nextAudio.volume = 0.75; // Set to 75%
+            nextAudio.play().catch(err => {
+                console.error('Next sound error:', err);
+            });
+
+            const isCorrect = selectedAnswer === quizData[currentQuestion].correct;
+            
+            userAnswers.push({
+                question: quizData[currentQuestion].question,
+                userAnswer: quizData[currentQuestion].options[selectedAnswer],
+                correctAnswer: quizData[currentQuestion].options[quizData[currentQuestion].correct],
+                isCorrect: isCorrect
+            });
+
+            if (isCorrect) {
+                score++;
+            }
+
+            currentQuestion++;
+
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                // Show feedback screen instead of results
+                document.getElementById('quizScreen').classList.add('hidden');
+                document.getElementById('feedbackScreen').classList.remove('hidden');
+            }
+        }
+
+        function submitFeedback() {
+            const feedback = document.getElementById('feedbackInput').value.trim();
+            const errorMsg = document.getElementById('feedbackError');
+            
+            if (feedback === '') {
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+            
+            userFeedback = feedback;
+            
+            // Hide feedback screen and show rating screen
+            document.getElementById('feedbackScreen').classList.add('hidden');
+            document.getElementById('ratingScreen').classList.remove('hidden');
+        }
+
+        function selectRating(rating) {
+            userRating = rating;
+            
+            // Remove previous selection
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selection to clicked button
+            event.target.classList.add('selected');
+            
+            // Enable next button
+            document.getElementById('ratingNextBtn').style.opacity = '1';
+            document.getElementById('ratingNextBtn').style.pointerEvents = 'all';
+        }
+
+        function submitRating() {
+            if (userRating === null) {
+                document.getElementById('ratingError').classList.remove('hidden');
+                return;
+            }
+            
+            // Hide rating screen and show results
+            document.getElementById('ratingScreen').classList.add('hidden');
+            showResults();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion) / quizData.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showResults() {
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.remove('hidden');
+            
+            document.getElementById('scoreText').textContent = `${score}/${quizData.length}`;
+            
+            let message, subtitle, emoji;
+            const percentage = (score / quizData.length) * 100;
+            
+            // Play result sound based on score
+            const resultAudio = document.getElementById('resultSound');
+            
+            if (percentage === 100) {
+                emoji = "🏆";
+                message = `Sureshot ${userGender}!`;
+                subtitle = "You know me better than I know myself!";
+                resultAudio.src = perfectScoreSound;
+            } else if (percentage >= 80) {
+                emoji = "🌟";
+                message = "Amazing!";
+                subtitle = "You know me really well!";
+                resultAudio.src = lessThanPerfectSound;
+            } else if (percentage >= 60) {
+                emoji = "😊";
+                message = "Pretty Good!";
+                subtitle = "You know me quite well!";
+                resultAudio.src = lessThanPerfectSound;
+            } else if (percentage >= 40) {
+                emoji = "🤔";
+                message = "Not Bad!";
+                subtitle = "But there's room to learn more!";
+                resultAudio.src = lessThanPerfectSound;
+            } else {
+                emoji = "😅";
+                message = "Oops!";
+                subtitle = "We should hang out more often!";
+                resultAudio.src = lessThanPerfectSound;
+            }
+            
+            // Play the result sound
+            resultAudio.volume = 0.6;
+            resultAudio.play().catch(err => {
+                console.error('Result sound error:', err);
+            });
+            
+            document.getElementById('resultEmoji').textContent = emoji;
+            document.getElementById('resultMessage').textContent = message;
+            document.getElementById('resultSubtitle').textContent = subtitle;
+
+            sendResultsToTelegram();
+        }
+
+        function sendResultsToTelegram() {
+            const timestamp = new Date().toLocaleString();
+            const percentage = Math.round((score / quizData.length) * 100);
+            
+            let resultText = `🎯 Friend Knowledge Quiz Results\n\n`;
+            resultText += `👤 Name: ${userName}\n`;
+            resultText += `⚧️ Gender: ${userGender}\n`;
+            resultText += `📊 Score: ${score}/${quizData.length} (${percentage}%)\n`;
+            resultText += `⏰ Completed: ${timestamp}\n\n`;
+            resultText += `💭 Feedback: ${userFeedback}\n`;
+            resultText += `⭐ WebUI Rating: ${userRating}/5\n\n`;
+            resultText += `📝 Detailed Results:\n`;
+            
+            userAnswers.forEach((answer, index) => {
+                resultText += `\n${index + 1}. ${answer.question}\n`;
+                resultText += `   Answer: ${answer.userAnswer} ${answer.isCorrect ? '✅' : '❌'}\n`;
+                if (!answer.isCorrect) {
+                    resultText += `   Correct: ${answer.correctAnswer}\n`;
+                }
+            });
+
+            console.log('Sending to Telegram:', resultText);
+
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: resultText
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Telegram response:', data);
+                if (data.ok) {
+                    console.log('✅ Message sent successfully!');
+                } else {
+                    console.error('❌ Telegram error:', data);
+                }
+            })
+            .catch(err => {
+                console.error('❌ Network error:', err);
+            });
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            userAnswers = [];
+            document.getElementById('resultScreen').classList.add('hidden');
+            document.getElementById('introScreen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
+    
+  </body>
+  
+</html>
